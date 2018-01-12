@@ -1,6 +1,35 @@
 package classes;
 
 public class Pays {
-	String Nom;
+	String nom;
 	Continent continent;
+	
+	@Override
+	public String toString() {
+		return ("Pays: " + nom + "(" + continent+")");
+	}
+	
+	
+	public Pays() {
+		
+	}
+
+
+	//Getter et Setter
+	public String getNom() {
+		return nom;
+	}
+
+	public void setNom(String nom) {
+		this.nom = nom;
+	}
+
+	public Continent getContinent() {
+		return continent;
+	}
+
+	public void setContinent(Continent continent) {
+		this.continent = continent;
+	}
+	
 }
