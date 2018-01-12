@@ -1,7 +1,5 @@
 package classes;
 
-import java.util.ArrayList;
-
 public class Photographe {
 	String nom;
 	String prenom;
@@ -76,9 +74,12 @@ public class Photographe {
 		this.pays = pays;
 	}
 	
+	public Continent getContinent() {
+		return pays.getContinent();
+	}
 	
 	/*
-	public Continent getContinent() {
-		return Continent;
+	public ArrayList<Specialite> getExperience() {
+		
 	}*/
 }

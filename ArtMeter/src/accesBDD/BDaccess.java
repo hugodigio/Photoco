@@ -46,30 +46,6 @@ public class BDaccess {
 	      specialites  = new ArrayList<>();
 	      continents   = new ArrayList<>();
 	      
-	      
-	      /*
-	      //L'objet ResultSet contient le résultat de la requête SQL
-	      result = state.executeQuery("SELECT * FROM Artiste");
-	      //On récupère les MetaData
-	      ResultSetMetaData resultMeta = result.getMetaData();
-	         
-	      System.out.println("\n**********************************");
-	      //On affiche le nom des colonnes
-	      for(int i = 1; i <= resultMeta.getColumnCount(); i++)
-	        System.out.print("\t" + resultMeta.getColumnName(i).toUpperCase() + "\t *");
-	         
-	      System.out.println("\n**********************************");
-	         
-	      while(result.next()){         
-	        for(int i = 1; i <= resultMeta.getColumnCount(); i++)
-	          System.out.print("\t" + result.getObject(i).toString() + "\t |");
-	            
-	        System.out.println("\n---------------------------------");
-
-	      }
-
-	      */
-	         
 	    } catch (Exception e) {
 	      e.printStackTrace();
 	    }      
@@ -84,25 +60,6 @@ public class BDaccess {
 		
 	}
 	
-	/*
-	public Photographe getPhotographe(int id) {
-		Photographe p = null;
-		try {
-			result = state.executeQuery("SELECT * FROM Photographe WHERE id_photographe="+id);
-			ResultSetMetaData resultMeta = result.getMetaData();
-		         
-		      result.next();
-		      p.setNom(result.getObject(2).toString());
-		      p.setPrenom(result.getObject(2).toString());
-		      p.setAge(result.getInt(6));
-		      p.setPays(result.getObject(2));
-		      
-		} catch (Exception e) {
-			System.out.println("erreur lors de la récupération de l'artiste "+id+" :\n"+e.getMessage());
-		}
-		return p;
-	}
-	*/
 	public ArrayList<Photographe> getPhotographes(){
 		return photographes;
 	}
@@ -128,15 +85,12 @@ public class BDaccess {
 		/* nous commençons par récupérer la classe centrale de la base de données: photographe.
 		 * a chaque fois que nous récupérons une clé étrangère, on récupère toutes les données
 		 * qui sont associé à cette clé étrangère */
-		int i = 0;
+
 		try {
-			ResultSet resultP; 		// contiendra le résultat de la requête effectué pour Photographe
-			ResultSet resultS; 		// contiendra le résultat de la requête effectué pour Specialite
-			ResultSet resultAuS;	// contiendra le résultat de la requête effectué pour AUneSpecialite
-			ResultSet resultPays;	// contiendra le résultat de la requête effectué pour Pays
-			ResultSet resutltC;		//// contiendra le résultat de la requête effectué pour Continent
+			ResultSet result; 		// contiendra le résultat de la requête effectué
 			
 			//les hashmaps servent a retenir la correspondance ID/Variable, pour éviter les doublons
+			HashMap<Integer, Photographe> ids_photographes = new HashMap<>();
 			HashMap<Integer, Pays> ids_pays = new HashMap<>();
 			HashMap<Integer, Continent> ids_continents = new HashMap<>();
 			HashMap<Integer, Specialite> ids_specialites = new HashMap<>();
@@ -161,58 +115,91 @@ public class BDaccess {
 			final int ID_CONTINENT = 2;
 			final int NOM_PAYS = 3;
 			
-			//variables temporaires
-			Specialite sp = null;
-			AUneSpecialite aus = null;
-			Continent ct = null;
-			Pays pays = null;
-			Photographe p = null;	
 			
-			
-			
+			//importation des données de table photographe
 			requete = "SELECT * FROM Photographe;";
-			resultP = state.executeQuery(requete);
-			while(resultP.next()) {
-				i++;
-				//ajout du photographe
-				
-				//traitement des liaisons avec la table AUneSpecialite
-				requete =  "SELECT * FROM AUneSpecialite ";
-				requete += "WHERE id_photographe="+resultP.getInt(ID)+";";
-				if(!isEmpty(requete)) {
-					/*resultAuS = state.executeQuery(requete);
-					while(resultAuS.next()) {
-						requete =  "SELECT * FROM Specialite ";
-						requete += "WHERE id_specialite="+resultAuS.getInt(ID_SPECIALITE)+";";
-						if(!isEmpty(requete)) {
-							//ajout de la specialite de la personne en cours de traitement si elle n'existe pas deja
-							resultS = state.executeQuery(requete);
-							if(ids_specialites.get(resultS.getInt(ID)) != null){
-								sp = new Specialite(resultS.getString(NOM));
-								ids_specialites.put(resultS.getInt(ID), sp);
-							}
-						} else {
-							System.out.println("la specialité avec id "+resultAuS.getInt(ID_SPECIALITE)+" n'existe pas!");
-						}
-						
-						
-					}*/
-					
-				} else {
-					System.out.println("Le photographe "+ resultP.getString(NOM)+" "+resultP.getString(PRENOM)+" n'a pas de specialite");
+			result = state.executeQuery(requete);
+			ArrayList<Integer> fk_pays = new ArrayList<>(); 
+			while(result.next()) {
+				Photographe p = new Photographe();
+				ids_photographes.put(result.getInt(ID), p);
+				p.setNom(result.getString(NOM));
+				p.setPrenom(result.getString(PRENOM));
+				p.setAge(result.getInt(AGE));
+				p.setPrixPrestation(result.getInt(PRIX));
+				//nous stockons la clé étrangère id_pays dans une Arraylist
+				//afin de pouvoir la traiter après que la table pays soit importé
+				fk_pays.add(result.getInt(ID_PAYS));
+				photographes.add(p);
+			}
+			
+			//importation des données de Specialite
+			result = state.executeQuery("SELECT * FROM Specialite");
+			while(result.next()) {
+				Specialite s = new Specialite(result.getObject(1).toString());
+				specialites.add(s);
+				ids_specialites.put(result.getInt(ID), s);
+			}
+			
+			//importation de AUneSpecialite
+				//utilisation des differents Hmap pour faire la correspondande ID/Objet
+			requete = "SELECT * FROM AUneSpecialite;";
+			result = state.executeQuery(requete);
+			while(result.next()) {
+				AUneSpecialite aus = new AUneSpecialite();
+				if(ids_photographes.containsKey(result.getInt(1))) {
+					aus.setPhotographe(ids_photographes.get(result.getInt(1)));
 				}
+				if(ids_specialites.containsKey(result.getInt(2))) {
+					aus.setSpecialite(ids_specialites.get(result.getInt(2)));
+				}
+				aus.setExperience(result.getInt(3));
+				aUneSpecialtes.add(aus);
 				
-				//suite de l'ajout de photographe
 			}
-			//Specialites
-			ResultSet resultSpecialite;
-			resultSpecialite = state.executeQuery("SELECT nom FROM Specialite");
-			ResultSetMetaData resultMeta = resultSpecialite.getMetaData();
-			while(resultSpecialite.next()) {
-				specialites.add(new Specialite(resultSpecialite.getObject(1).toString()));
+			
+			//importation de Continent
+			requete = "SELECT * FROM Continent;";
+			result = state.executeQuery(requete);
+			while(result.next()) {
+				Continent ct = new Continent();
+				ct.setNom(result.getString(NOM));
+				continents.add(ct);
+				ids_continents.put(result.getInt(ID), ct);
 			}
+			
+			//importation de Pays
+			requete = "SELECT * FROM Pays;";
+			result = state.executeQuery(requete);
+			while(result.next()) {
+				Pays p = new Pays();
+				p.setNom(result.getString(NOM_PAYS));
+				if(ids_continents.containsKey(result.getInt(ID_CONTINENT))) {
+					p.setContinent(ids_continents.get(result.getInt(ID_CONTINENT)));
+				}
+				pays.add(p);
+				ids_pays.put(result.getInt(ID), p);
+				
+			}
+			
+			
+			//on lie les clé étrangères de Photographe avec les Objets Pays correspondant
+			int i=0;
+			if(fk_pays.size() != photographes.size()) {
+				System.out.println("Il n'y a pas autant de photographes que de cle etrangeres en attente d'association!"
+						+ "\nnombre photographes: "+photographes.size()+", nombre cles: "+fk_pays.size());
+			}else {
+				for(Photographe p : photographes) {
+					p.setPays(ids_pays.get(fk_pays.get(i)));
+					i++;
+				}
+			}
+			
+			
+			
+			
 		} catch (SQLException e) {
-			System.out.println("erreur lors de la récupération des données: "+i+"\n"+e.getMessage());
+			System.out.println("erreur lors de la récupération des données: \n"+e.getMessage());
 			e.printStackTrace();
 		}
 		

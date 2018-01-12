@@ -11,7 +11,10 @@ public class MainClass {
 		
 		bd.requestAll();
 		
-		bd.TestsSQL("SELECT * FROM AUneSpecialite WHERE id_photographe=1;");
+		System.out.println("nombre photographe: "+bd.getPhotographes().size());
+		for(Photographe p : bd.getPhotographes()) {
+			System.out.println(p);
+		}
 		
 		bd.closeConnection();
 		

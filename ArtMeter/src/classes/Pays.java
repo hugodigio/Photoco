@@ -6,13 +6,12 @@ public class Pays {
 	
 	@Override
 	public String toString() {
-		return ("Pays: " + nom + "Continent: ");
+		return ("Pays: " + nom + "(" + continent+")");
 	}
 	
 	
-	public Pays(String nom) {
-		super();
-		this.nom = nom;
+	public Pays() {
+		
 	}
 
 
