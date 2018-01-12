@@ -2,11 +2,9 @@ package classes;
 
 public class Specialite {
 	String nom;
-	Metier metier;	//le metier associé a la specialite
 	
-	public Specialite(String nom, Metier metier) {
+	public Specialite(String nom) {
 		this.nom = nom;
-		this.metier = metier;
 	}
 	
 	@Override
