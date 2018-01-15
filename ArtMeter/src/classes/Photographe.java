@@ -1,5 +1,8 @@
 package classes;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class Photographe {
 	String nom;
 	String prenom;
@@ -78,8 +81,22 @@ public class Photographe {
 		return pays.getContinent();
 	}
 	
-	/*
-	public ArrayList<Specialite> getExperience() {
-		
-	}*/
+	
+	public int getExperience(Specialite specialite) {
+		//TODO a remplir
+		return 0;
+	}
+	
+	public HashMap<Specialite, Integer> getAllExperiences(){
+		//TODO a remplir
+		return null;
+	}
+	
+	public ArrayList<Specialite> getSpecialites(){
+		ArrayList sp = new ArrayList<>();
+		//TODO a remplir
+		return sp;
+	}
+	
+	
 }
