@@ -93,7 +93,7 @@ public class Photographe {
 	}
 	
 	public ArrayList<Specialite> getSpecialites(){
-		ArrayList sp = new ArrayList<>();
+		ArrayList<Specialite> sp = new ArrayList<>();
 		//TODO a remplir
 		return sp;
 	}

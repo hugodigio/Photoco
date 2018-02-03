@@ -19,11 +19,18 @@ public class BDaccess {
 	
 	/** variable qui gère la connexion à la base de données */
 	private Statement state;
+	
+	/* differentes arraylist qui garde en memoire les tables de la bd sous forme de classes*/
 	private ArrayList<Photographe> photographes;
 	private ArrayList<Pays> pays;
 	private ArrayList<Continent> continents;
 	private ArrayList<AUneSpecialite> aUneSpecialtes;
 	private ArrayList<Specialite> specialites;
+	//les hashmaps servent a retenir la correspondance ID/Variable, pour éviter les doublons
+	HashMap<Integer, Photographe> ids_photographes;
+	HashMap<Integer, Pays> ids_pays;
+	HashMap<Integer, Continent> ids_continents;
+	HashMap<Integer, Specialite> ids_specialites;
 	
 	
 	/**Constructeur de la classe BDacces. Le constucteur établie une connexion à la base de données */
@@ -90,10 +97,10 @@ public class BDaccess {
 			ResultSet result; 		// contiendra le résultat de la requête effectué
 			
 			//les hashmaps servent a retenir la correspondance ID/Variable, pour éviter les doublons
-			HashMap<Integer, Photographe> ids_photographes = new HashMap<>();
-			HashMap<Integer, Pays> ids_pays = new HashMap<>();
-			HashMap<Integer, Continent> ids_continents = new HashMap<>();
-			HashMap<Integer, Specialite> ids_specialites = new HashMap<>();
+			ids_photographes = new HashMap<>();
+			ids_pays = new HashMap<>();
+			ids_continents = new HashMap<>();
+			ids_specialites = new HashMap<>();
 			
 			//variable qui stocke les requêtes a executer (pour plus de clarté);
 			String requete; 
@@ -150,10 +157,10 @@ public class BDaccess {
 				if(ids_photographes.containsKey(result.getInt(1))) {
 					aus.setPhotographe(ids_photographes.get(result.getInt(1)));
 				}
-				if(ids_specialites.containsKey(result.getInt(2))) {
-					aus.setSpecialite(ids_specialites.get(result.getInt(2)));
+				if(ids_specialites.containsKey(result.getInt(ID_SPECIALITE))) {
+					aus.setSpecialite(ids_specialites.get(result.getInt(ID_SPECIALITE)));
 				}
-				aus.setExperience(result.getInt(3));
+				aus.setExperience(result.getInt(ANNEE_EXPERIENCES));
 				aUneSpecialtes.add(aus);
 				
 			}
@@ -202,6 +209,28 @@ public class BDaccess {
 			System.out.println("erreur lors de la récupération des données: \n"+e.getMessage());
 			e.printStackTrace();
 		}
+		
+	}
+	
+	/** supprimer le photographe en parametre à la base de donnée **/
+	public void supprimerPhotographe(Photographe photographe) {
+		/*supprimer la la ligne ou le photographe est present dans la table AUneSpecialite*/
+		/*supprimer le photographe*/
+		
+	}
+	
+	/** ajouter le photographe en parametre à la base de donnée */
+	public void ajouterPhotographe(Photographe photographe) {
+		
+	}
+	
+	/** modifier le photographe en parametre à la base de donnée 
+	 * 
+	 * @param p_original Photographe sur lequel on va effectuer les modifications
+	 * */
+	public void modifierPhotographe(Photographe p_original, Photographe p_nouveau) {
+		/*chercher id du photographe dans la hashmap*/
+		/*effectuer les modifications sur les parametres qui sont differents*/
 		
 	}
 	
