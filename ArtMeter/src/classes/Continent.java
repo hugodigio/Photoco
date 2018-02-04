@@ -2,6 +2,7 @@ package classes;
 
 public class Continent {
 	String nom;
+	int distance;
 	
 	@Override
 	public String toString() {
@@ -17,6 +18,9 @@ public class Continent {
 		this.nom = nom;
 	}
 	
+	public int getDistance(){
+		return distance;
+	}
 	
 	
 }
