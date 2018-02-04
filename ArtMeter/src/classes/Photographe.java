@@ -1,5 +1,8 @@
 package classes;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class Photographe {
 	String nom;
 	String prenom;
@@ -78,8 +81,50 @@ public class Photographe {
 		return pays.getContinent();
 	}
 	
-	/*
-	public ArrayList<Specialite> getExperience() {
-		
-	}*/
+	/**
+	 * permet de recupérer le nombre d'années d'experiences d'une spécialité pour un photographe
+	 * @param specialite spécialité concernée
+	 * @return nombre d'année d'expériences
+	 */
+	public int getExperience(Specialite specialite, ArrayList<AUneSpecialite> aus) {
+		int exp = 0;
+		for(AUneSpecialite a : aus) {
+			if(a.getPhotographe() == this && a.getSpecialite() == specialite) {
+				exp = a.getExperience();
+			}
+		}
+		return 0;
+	}
+	
+	/**
+	 * Permet de récupérer toutes les années d'experiences d'un photographes dans ses différentes specialites
+	 * @param aus arraylist d'objet AUneSpecialite, qui contient toutes les relations entre les photographes et les specialite avec leurs années d'experiences
+	 * @return retourne une hasmap qui contient la relation Specialité : nb d'annee d'experience
+	 */
+	public HashMap<Specialite, Integer> getAllExperiences(ArrayList<AUneSpecialite> aus){
+		HashMap<Specialite, Integer> si = new HashMap<>();
+		for(AUneSpecialite a : aus) {
+			if(a.getPhotographe() == this) {
+				si.put(a.getSpecialite(), a.getExperience());
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Fonction qui permet de récupérer toutes les spécialites d'un photographe
+	 * @param aus arraylist d'objet AUneSpecialite, qui contient toutes les relations entre les photographes et les specialite avec leurs années d'experiences
+	 * @return retourne une arraylist qui contient toute les specialite du photographe
+	 */
+	public ArrayList<Specialite> getSpecialites(ArrayList<AUneSpecialite> aus){
+		ArrayList<Specialite> sp = new ArrayList<>();
+		for(AUneSpecialite a : aus) {
+			if(a.getPhotographe() == this) {
+				sp.add(a.getSpecialite());
+			}
+		}
+		return sp;
+	}
+	
+	
 }
