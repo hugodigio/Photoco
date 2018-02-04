@@ -29,11 +29,38 @@ public class Comparateur implements Comparator<Photographe> {
 	}
 	
 	
+	
 	public int score (Photographe photographe){
 		
 		int score = 0;
 		
 		//SPECIALITE ET EXPERIENCES
+		ArrayList<Specialite> listespe;
+		listespe =	photographe.getSpecialites(liste);
+		
+		for (Specialite s : listespe){
+		
+			String speIdeal = ideal.getSpecialiteAUS();
+			
+			if (speIdeal.equals("mode")){
+				if(s.getNom().equals("mode")) score += 100;
+				if(s.getNom().equals("portrait")) score += 60;
+				else score -= 100;
+			} else if (speIdeal.equals("portrait")){
+				if(s.getNom().equals("portrait")) score += 100;
+				if(s.getNom().equals("mode")) score += 60;
+				else score -= 100;
+			} else if (speIdeal.equals("paysage")){
+				if(s.getNom().equals("paysage")) score += 100;
+				if(s.getNom().equals("sport")) score += 60;
+				else score -= 100;
+			} else if (speIdeal.equals("sport")){
+				if(s.getNom().equals("sport")) score += 100;
+				if(s.getNom().equals("paysage")) score += 60;
+				else score -= 100;
+			}
+
+		}
 		
 		
 		//PAYS

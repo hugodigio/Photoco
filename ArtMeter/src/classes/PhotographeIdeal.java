@@ -6,14 +6,9 @@ public class PhotographeIdeal extends Photographe{
 	int exp;
 	
 	public PhotographeIdeal(String nom, String prenom, Pays pays, int prixPrestation, int age, Specialite spe, int exp){
-		super(nom, prenom, pays, prixPrestation, age);
+		super(nom, prenom, age, prixPrestation, pays);
 		this.spe = spe;
 		this.exp = exp;
-	}
-
-	public void ajouter_AUS (Photographe ph, Specialite spe, int exp){
-		AUneSpecialite ajout = new AUneSpecialite(ph, spe, exp);
-		liste.add(ajout);
 	}
 
 	public String getSpecialiteAUS() {
