@@ -121,6 +121,8 @@ public class BDaccess {
 			//pour pays
 			final int ID_CONTINENT = 2;
 			final int NOM_PAYS = 3;
+			//pour continent
+			final int DISTANCE = 3;
 			
 			
 			//importation des données de table photographe
@@ -171,6 +173,7 @@ public class BDaccess {
 			while(result.next()) {
 				Continent ct = new Continent();
 				ct.setNom(result.getString(NOM));
+				ct.setDistance(result.getInt(DISTANCE));
 				continents.add(ct);
 				ids_continents.put(result.getInt(ID), ct);
 			}

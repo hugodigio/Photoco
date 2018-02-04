@@ -70,6 +70,7 @@ public class Comparateur implements Comparator<Photographe> {
 		else if ( photographe.getContinent().equals(ideal.getContinent()) )
 			score +=30;
 		
+		
 		else if (  Math.abs( (photographe.getContinent().getDistance()) - (ideal.getContinent().getDistance()) ) < 5010 )
 			score +=0;
 		else
@@ -103,7 +104,7 @@ public class Comparateur implements Comparator<Photographe> {
 		else
 			score +=0;
 		
-		return score;
+		return -score;
 	}
 	
 	
