@@ -7,8 +7,9 @@ public class Pays {
 	public Pays() {
 	}
 	
-	public Pays(String nom) {
+	public Pays(String nom, Continent continent) {
 		this.nom = nom;
+		this.continent = continent;
 	}
 
 	@Override
