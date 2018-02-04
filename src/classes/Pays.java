@@ -4,17 +4,17 @@ public class Pays {
 	String nom;
 	Continent continent;
 	
-	public Pays() {
+	@Override
+	public String toString() {
+		return ("Pays: " + nom + "Continent: ");
 	}
 	
+	
 	public Pays(String nom) {
+		super();
 		this.nom = nom;
 	}
 
-	@Override
-	public String toString() {
-		return ("Pays: " + nom + "(" + continent+")");
-	}
 
 	//Getter et Setter
 	public String getNom() {

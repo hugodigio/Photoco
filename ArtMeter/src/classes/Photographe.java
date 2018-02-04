@@ -12,8 +12,14 @@ public class Photographe {
 	int prixPrestation;
 	Pays pays;
 	
-	public Photographe() {
-		// TODO Auto-generated constructor stub
+	public Photographe(){}
+	
+	public Photographe(String nom, String prenom, int age, int prixPrestation, Pays pays) {
+		this.nom = nom;
+		this.prenom = prenom;
+		this.age = age;
+		this.prixPrestation = prixPrestation;
+		this.pays = pays;
 	}
 	
 	@Override
@@ -82,9 +88,9 @@ public class Photographe {
 	}
 	
 	/**
-	 * permet de recupérer le nombre d'années d'experiences d'une spécialité pour un photographe
-	 * @param specialite spécialité concernée
-	 * @return nombre d'année d'expériences
+	 * permet de recupï¿½rer le nombre d'annï¿½es d'experiences d'une spï¿½cialitï¿½ pour un photographe
+	 * @param specialite spï¿½cialitï¿½ concernï¿½e
+	 * @return nombre d'annï¿½e d'expï¿½riences
 	 */
 	public int getExperience(Specialite specialite, ArrayList<AUneSpecialite> aus) {
 		int exp = 0;
@@ -97,9 +103,9 @@ public class Photographe {
 	}
 	
 	/**
-	 * Permet de récupérer toutes les années d'experiences d'un photographes dans ses différentes specialites
-	 * @param aus arraylist d'objet AUneSpecialite, qui contient toutes les relations entre les photographes et les specialite avec leurs années d'experiences
-	 * @return retourne une hasmap qui contient la relation Specialité : nb d'annee d'experience
+	 * Permet de rï¿½cupï¿½rer toutes les annï¿½es d'experiences d'un photographes dans ses diffï¿½rentes specialites
+	 * @param aus arraylist d'objet AUneSpecialite, qui contient toutes les relations entre les photographes et les specialite avec leurs annï¿½es d'experiences
+	 * @return retourne une hasmap qui contient la relation Specialitï¿½ : nb d'annee d'experience
 	 */
 	public HashMap<Specialite, Integer> getAllExperiences(ArrayList<AUneSpecialite> aus){
 		HashMap<Specialite, Integer> si = new HashMap<>();
@@ -112,8 +118,8 @@ public class Photographe {
 	}
 	
 	/**
-	 * Fonction qui permet de récupérer toutes les spécialites d'un photographe
-	 * @param aus arraylist d'objet AUneSpecialite, qui contient toutes les relations entre les photographes et les specialite avec leurs années d'experiences
+	 * Fonction qui permet de rï¿½cupï¿½rer toutes les spï¿½cialites d'un photographe
+	 * @param aus arraylist d'objet AUneSpecialite, qui contient toutes les relations entre les photographes et les specialite avec leurs annï¿½es d'experiences
 	 * @return retourne une arraylist qui contient toute les specialite du photographe
 	 */
 	public ArrayList<Specialite> getSpecialites(ArrayList<AUneSpecialite> aus){
