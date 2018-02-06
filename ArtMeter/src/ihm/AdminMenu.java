@@ -19,6 +19,7 @@ public class AdminMenu {
 	public AdminMenu(Fenetre fenetre) {
 		this.fenetre = fenetre;
 		fenetre.add(new Panneau());
+		fenetre.setTitle("Menu administrateur");
 		
 	}
 	

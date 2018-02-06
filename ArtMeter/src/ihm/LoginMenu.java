@@ -38,7 +38,7 @@ public class LoginMenu{
 	Fenetre fenetre;
 	public LoginMenu(Fenetre fenetre) {
 		this.fenetre = fenetre;
-		
+		fenetre.setTitle("Bienvenue sur PhotoCo !");
 		
 		/* barre de menu 
 		JMenuBar barreMenu = new JMenuBar();
@@ -119,12 +119,10 @@ public class LoginMenu{
 			gbc.gridx = 0;
 			gbc.gridy = 3;
 			gbc.gridwidth=2;
-			gbc.fill = GridBagConstraints.HORIZONTAL;
 			add(valider,gbc);
 			gbc.gridx = 0;
 			gbc.gridy = 0;
 			gbc.gridwidth = 2;
-			gbc.fill = GridBagConstraints.HORIZONTAL;
 			gbc.insets = new Insets(0, 0, 50, 0);
 			add(titre,gbc);
 			
