@@ -1,16 +1,22 @@
 package ihm;
 
 import java.awt.BorderLayout;
+import java.awt.Button;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -60,12 +66,51 @@ public class LoginMenu{
 			identifiant.setLocation(this.getWidth()/2, this.getHeight()/2);
 			JLabel id = new JLabel("Identifiant:");
 			JLabel mdp = new JLabel("Mot de Passe:");
+			JButton valider = new JButton("Valider");
 			id.setForeground(Color.WHITE);
 			mdp.setForeground(Color.WHITE);
 			add(id);
 			add(identifiant);
 			add(mdp);
 			add(motdepasse);
+			add(valider);
+			
+			valider.addActionListener(new ValidationButton());
+			this.addKeyListener(new ValidationKey());
+		}
+		
+		public void validation() {
+			String id = identifiant.getText();
+			String mdp = motdepasse.getText();
+			
+			if(id.equals("admin") && mdp.equals("admin")) {
+				System.out.println("Admin !");
+				fenetre.change(2);
+			}else if (id.equals("")||id.equals("")) {
+				System.out.println("Champ(s) vide");
+			}else {
+				System.out.println("Utilisateur !");
+			}
+		}
+		
+		private class ValidationButton implements ActionListener {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				validation();				
+			}
+			
+		}
+		
+		private class ValidationKey extends KeyAdapter {
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					validation();
+				}
+			}
+			
 		}
 		
 		@Override

@@ -47,12 +47,6 @@ public class BDaccess {
 	      //Création d'un objet Statement
 	      state = conn.createStatement();
 	      
-	      photographes = new ArrayList<>();
-	      pays 		   = new ArrayList<>();
-	      aUneSpecialtes=new ArrayList<>();
-	      specialites  = new ArrayList<>();
-	      continents   = new ArrayList<>();
-	      
 	    } catch (Exception e) {
 	      e.printStackTrace();
 	    }      
@@ -96,11 +90,17 @@ public class BDaccess {
 		try {
 			ResultSet result; 		// contiendra le résultat de la requête effectué
 			
+			photographes  = new ArrayList<>();
+		    pays          = new ArrayList<>();
+		    aUneSpecialtes= new ArrayList<>();
+		    specialites   = new ArrayList<>();
+		    continents    = new ArrayList<>();
+			
 			//les hashmaps servent a retenir la correspondance ID/Variable, pour éviter les doublons
 			ids_photographes = new HashMap<>();
-			ids_pays = new HashMap<>();
-			ids_continents = new HashMap<>();
-			ids_specialites = new HashMap<>();
+			ids_pays         = new HashMap<>();
+			ids_continents   = new HashMap<>();
+			ids_specialites  = new HashMap<>();
 			
 			//variable qui stocke les requêtes a executer (pour plus de clarté);
 			String requete; 
@@ -123,6 +123,8 @@ public class BDaccess {
 			final int NOM_PAYS = 3;
 			//pour continent
 			final int DISTANCE = 3;
+			//specialite
+			final int GROUPE = 3;
 			
 			
 			//importation des données de table photographe
@@ -145,7 +147,7 @@ public class BDaccess {
 			//importation des données de Specialite
 			result = state.executeQuery("SELECT * FROM Specialite");
 			while(result.next()) {
-				Specialite s = new Specialite(result.getObject(1).toString());
+				Specialite s = new Specialite(result.getObject(NOM).toString(),result.getInt(GROUPE));
 				specialites.add(s);
 				ids_specialites.put(result.getInt(ID), s);
 			}
@@ -216,24 +218,90 @@ public class BDaccess {
 	}
 	
 	/** supprimer le photographe en parametre à la base de donnée **/
+	//@SuppressWarnings("unlikely-arg-type")
 	public void supprimerPhotographe(Photographe photographe) {
-		/*supprimer la la ligne ou le photographe est present dans la table AUneSpecialite*/
+		/*chercher si le photographe est dans la liste des photographes et récupérer son ID*/
+		Integer id = -1;
+		if(ids_photographes.containsValue(photographe)) {
+			for (Integer o : ids_photographes.keySet()) {
+			      if (ids_photographes.get(o).equals(photographe)) {
+			    	  id = o;
+			      }
+			 }
+			/*supprimer la la ligne ou le photographe est present dans la table AUneSpecialite*/
+			if(photographes.contains(photographe) && id != -1) {
+				if(aUneSpecialtes.contains(photographe)) {
+					String requete = "DELETE * FROM AUneSpecialite WHERE id_photographe="+id+";";
+					try {
+						ResultSet result = state.executeQuery(requete);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					for(AUneSpecialite aus : aUneSpecialtes) {
+						if(aus.getPhotographe() == photographe) {
+							aUneSpecialtes.remove(aus);
+						}
+					}
+					
+				}
+				String requete = "DELETE id_photographe="+id+" FROM Photographe";
+				photographes.remove(photographe);
+				ids_photographes.remove(id);
+				
+			}
+		}
+				
 		/*supprimer le photographe*/
 		
 	}
 	
-	/** ajouter le photographe en parametre à la base de donnée */
-	public void ajouterPhotographe(Photographe photographe) {
-		
+	/**
+	 * ajouter le photographe en parametre à la base de donnée
+	 * 
+	 * @param photographe photographe que l'on doit ajouter
+	 */
+	public void ajouterPhotographe(Photographe photographe, Pays pays) {
+		String requete = null;
+		Integer id_pays = 0;
+		requete = "INSERT INTO `Photographe` (`id_photographe`, `Nom`, `Prenom`, `Photo`, `Lienportfolio`, `age`, `prixPrestation`, `id_pays`)";
+		for (Integer o : ids_photographes.keySet()) {
+		      if (ids_photographes.get(o).equals(photographe)) {
+		    	  id_pays = o;
+		      }
+		 }
+		requete += "VALUES ('', '"+photographe.getPrenom()+"', '"+photographe.getNom()+"', '', '', '"+photographe.getAge()+"', '"+photographe.getPrixPrestation()+"', '"+id_pays+"')";
+		requestAll();
 	}
 	
 	/** modifier le photographe en parametre à la base de donnée 
 	 * 
-	 * @param p_original Photographe sur lequel on va effectuer les modifications
+	 * @param photographe Photographe sur lequel on va effectuer les modifications
 	 * */
-	public void modifierPhotographe(Photographe p_original, Photographe p_nouveau) {
+	public void modifierPhotographe(Photographe photographe) {
+		Integer id = 0, id_pays = 0;
+		String requete;
 		/*chercher id du photographe dans la hashmap*/
-		/*effectuer les modifications sur les parametres qui sont differents*/
+		if(ids_photographes.containsValue(photographe)) {
+			for (Integer o : ids_photographes.keySet()) {
+			      if (ids_photographes.get(o).equals(photographe)) {
+			    	  id = o;
+			      }
+			 }
+		}
+		/*il faut récupérer l'id du pays du photographe*/
+		if(ids_pays.containsValue(photographe.getPays())) {
+			for (Integer o : ids_photographes.keySet()) {
+			      if (ids_pays.get(o).equals(photographe.getPays())) {
+			    	  id_pays = o;
+			      }
+			 }
+		}
+		/*effectuer les modifications sur la base de données*/
+		requete = "UPDATE `Photographe`";
+		requete += " SET `Nom` = '"+photographe.getNom()+"', `Prenom` = '"+photographe.getPrenom()+"', `age` = '"+photographe.getAge()+"', `prixPrestation` = '"+photographe.getPrixPrestation()+"', `id_pays` = '"+id_pays+"' WHERE `Photographe`.`id_photographe` = "+id+";";
+		
+		
 		
 	}
 	
