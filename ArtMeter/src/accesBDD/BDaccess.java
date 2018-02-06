@@ -123,6 +123,8 @@ public class BDaccess {
 			final int NOM_PAYS = 3;
 			//pour continent
 			final int DISTANCE = 3;
+			//specialite
+			final int GROUPE = 3;
 			
 			
 			//importation des données de table photographe
@@ -145,7 +147,7 @@ public class BDaccess {
 			//importation des données de Specialite
 			result = state.executeQuery("SELECT * FROM Specialite");
 			while(result.next()) {
-				Specialite s = new Specialite(result.getObject(1).toString());
+				Specialite s = new Specialite(result.getObject(NOM).toString(),result.getInt(GROUPE));
 				specialites.add(s);
 				ids_specialites.put(result.getInt(ID), s);
 			}
