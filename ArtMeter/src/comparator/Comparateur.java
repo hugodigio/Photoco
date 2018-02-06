@@ -41,7 +41,7 @@ public class Comparateur implements Comparator<Photographe> {
 		for (Specialite spe : listespe){
 		
 			int scoreInterne = 0;
-			String speIdeal = ideal.getSpecialiteAUS();
+			String speIdeal = ideal.getSpecialiteAUS().getNom();
 			int expIdeal = ideal.getExperienceAUS();
 			int exp = photographe.getExperience(spe, liste);
 			
@@ -54,7 +54,7 @@ public class Comparateur implements Comparator<Photographe> {
 				else scoreInterne -= 10;
 				
 			}
-			else if (spe.getGroupe() == speIdeal.getGroupe()){
+			else if (spe.getGroupe() == ideal.getSpecialiteAUS().getGroupe()){
 				scoreInterne +=60;
 				
 				if (exp >= expIdeal) scoreInterne += 80;
