@@ -11,8 +11,8 @@ public class PhotographeIdeal extends Photographe{
 		this.exp = exp;
 	}
 
-	public String getSpecialiteAUS() {
-		return spe.getNom();
+	public Specialite getSpecialiteAUS() {
+		return spe;
 	}
 	
 	public int getExperienceAUS() {
