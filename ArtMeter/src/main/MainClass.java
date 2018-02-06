@@ -17,9 +17,9 @@ public class MainClass {
 		Fenetre fenetre = new Fenetre();
 		
 		/* chargement de la fenetre pour login */
-		fenetre.change(1);
+		fenetre.change(Fenetre.MENU_LOGIN,null);
 		
-		System.out.println("test base de donn�es:\n");
+		/*System.out.println("test base de donn�es:\n");
 		BDaccess bd = new BDaccess();
 		
 		
@@ -47,7 +47,7 @@ public class MainClass {
 			System.out.println(p);
 		}
 				
-		bd.closeConnection();
+		bd.closeConnection();*/
 		
 	}
 }
