@@ -38,29 +38,37 @@ public class Comparateur implements Comparator<Photographe> {
 		ArrayList<Specialite> listespe;
 		listespe =	photographe.getSpecialites(liste);
 		
-		for (Specialite s : listespe){
+		for (Specialite spe : listespe){
 		
+			int scoreInterne = 0;
 			String speIdeal = ideal.getSpecialiteAUS();
+			int expIdeal = ideal.getExperienceAUS();
+			int exp = photographe.getExperience(spe, liste);
 			
-			if (speIdeal.equals("mode")){
-				if(s.getNom().equals("mode")) score += 100;
-				if(s.getNom().equals("portrait")) score += 60;
-				else score -= 100;
-			} else if (speIdeal.equals("portrait")){
-				if(s.getNom().equals("portrait")) score += 100;
-				if(s.getNom().equals("mode")) score += 60;
-				else score -= 100;
-			} else if (speIdeal.equals("paysage")){
-				if(s.getNom().equals("paysage")) score += 100;
-				if(s.getNom().equals("sport")) score += 60;
-				else score -= 100;
-			} else if (speIdeal.equals("sport")){
-				if(s.getNom().equals("sport")) score += 100;
-				if(s.getNom().equals("paysage")) score += 60;
-				else score -= 100;
+			if (spe.getNom().equals(speIdeal)){
+				scoreInterne +=100;
+			
+				if (exp >= expIdeal) scoreInterne += 80;
+				else if ( Math.abs(exp-expIdeal) > 0 && Math.abs(exp-expIdeal) < 6 ) scoreInterne += 40;
+				else if ( Math.abs(exp-expIdeal) > 5 && Math.abs(exp-expIdeal) < 11 ) scoreInterne += 0;
+				else scoreInterne -= 10;
+				
 			}
-
+			else if (spe.getGroupe() == speIdeal.getGroupe()){
+				scoreInterne +=60;
+				
+				if (exp >= expIdeal) scoreInterne += 80;
+				else if ( Math.abs(exp-expIdeal) > 0 && Math.abs(exp-expIdeal) < 6 ) scoreInterne += 40;
+				else if ( Math.abs(exp-expIdeal) > 5 && Math.abs(exp-expIdeal) < 11 ) scoreInterne += 0;
+				else scoreInterne -= 10;
+				
+			}
+			else
+				scoreInterne -= 100;
+			
+			score = Math.max(score, scoreInterne);
 		}
+		
 		
 		
 		//PAYS
@@ -82,10 +90,10 @@ public class Comparateur implements Comparator<Photographe> {
 		if(photographe.getPrixPrestation() <= ideal.getPrixPrestation())
 			score += 50;
 		
-		else if ( photographe.getAge()-ideal.getAge() > 0 && photographe.getAge()-ideal.getAge() < 101)
+		else if ( photographe.getPrixPrestation()-ideal.getPrixPrestation() > 0 && photographe.getPrixPrestation()-ideal.getPrixPrestation() < 101)
 			score +=30;
 		
-		else if ( photographe.getAge()-ideal.getAge() > 100 && photographe.getAge()-ideal.getAge() < 251)
+		else if ( photographe.getPrixPrestation()-ideal.getPrixPrestation() > 100 && photographe.getPrixPrestation()-ideal.getPrixPrestation() < 251)
 			score +=15;
 		else
 			score +=0;
