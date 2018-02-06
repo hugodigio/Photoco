@@ -24,8 +24,8 @@ public class MainClass {
 		
 		
 		//J'ecris crée un ideal
-		Specialite mode = new Specialite ("mode");
-		Specialite portrait = new Specialite ("portrait");
+		Specialite mode = new Specialite ("mode",2);
+		Specialite portrait = new Specialite ("portrait",2);
 		Continent europe = new Continent("Europe",1000);
 		Pays france = new Pays("France", europe); 
 		PhotographeIdeal ideal = new PhotographeIdeal ("Ideal", "Mon", france, 100, 30, mode, 3);
