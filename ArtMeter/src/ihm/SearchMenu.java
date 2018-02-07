@@ -77,6 +77,7 @@ public class SearchMenu {
 			JComboBox speBox = new JComboBox();
 		    for(Specialite s : listeSpe){
 		    	speBox.addItem(s);
+		    	speIdeal = s;
 		    }
 		    speBox.setSelectedIndex(3);
 		    speBox.addActionListener(new ComboSpe());
@@ -94,6 +95,7 @@ public class SearchMenu {
 			JComboBox paysBox = new JComboBox();
 		    for(Pays p : listePays){
 		    	paysBox.addItem(p);
+		    	paysIdeal = p;
 		    }
 		    paysBox.setSelectedIndex(11);
 		   // paysBox.setRenderer(new paysRenderer());
@@ -255,7 +257,7 @@ public class SearchMenu {
 	    
 	}
 	
-	/*------------------SPEBOX RENDERER*/
+	/*------------------SPEBOX RENDERER-----------------------------------*/
 	
 	/*private class paysRenderer implements ListCellRenderer<Object>{
 		
@@ -327,7 +329,7 @@ public class SearchMenu {
 	public void validation() {
 		
 		//J'ecris crée un ideal
-
+		
 		PhotographeIdeal ideal = new PhotographeIdeal ("Ideal", "Mon", paysIdeal, prixIdeal, ageIdeal, speIdeal, expIdeal);
 		System.out.println(ideal);
 		ArrayList<Photographe> liste = new ArrayList <>();

@@ -43,13 +43,6 @@ public class ResultMenu {
 			
 
 				BDaccess bd = new BDaccess();
-					
-				/*Je cree un ideal.
-				Specialite mode = new Specialite ("mode",2);
-				Specialite portrait = new Specialite ("portrait",2);
-				Continent europe = new Continent("Europe",1000);
-				Pays france = new Pays("France", europe); 
-				PhotographeIdeal ideal = (PhotographeIdeal)ideal;*/
 				
 				//Je cree une liste des photographes de la BD.
 				bd.requestAll();		
