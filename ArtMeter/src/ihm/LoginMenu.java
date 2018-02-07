@@ -3,9 +3,15 @@ package ihm;
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -22,7 +28,9 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 
@@ -30,8 +38,9 @@ public class LoginMenu{
 	Fenetre fenetre;
 	public LoginMenu(Fenetre fenetre) {
 		this.fenetre = fenetre;
+		fenetre.setTitle("Bienvenue sur PhotoCo !");
 		
-		/* barre de menu */
+		/* barre de menu 
 		JMenuBar barreMenu = new JMenuBar();
 		JMenu typeConnexion = new JMenu("Type de connexion");
 		JRadioButtonMenuItem bd = new JRadioButtonMenuItem("Base de donnée");
@@ -48,48 +57,99 @@ public class LoginMenu{
 		barreMenu.add(typeConnexion);
 		
 		fenetre.setJMenuBar(barreMenu);
+		*/
 		
-		/* image de fond */
-		fenetre.add(new PanneauLogin());
+		fenetre.getContentPane().add(new Panneau());
 	}
 	
-	private class PanneauLogin extends JPanel{
+	private class PanneauImage extends JPanel{
+		
+		
+		
+		public PanneauImage(){
+			
+		}	
+		
+	}
+	
+	private class Panneau extends JPanel{
 		
 		JTextField identifiant;
-		JTextField motdepasse;
+		JPasswordField motdepasse;
+		private Image backgroundImage;
 		
-		public PanneauLogin(){
-			//pour les placements: grouplayout
+		public Panneau() {
+			try {
+				backgroundImage = ImageIO.read(new File("./src/ihm/Photo1-Login-TDG_photography_Tapei.jpg"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			GridBagLayout gbl = new GridBagLayout();
+			setLayout(gbl);
+			GridBagConstraints gbc = new GridBagConstraints();
 			
 			identifiant = new JTextField(20);
-			motdepasse = new JTextField(20);
+			motdepasse = new JPasswordField(20);
 			identifiant.setLocation(this.getWidth()/2, this.getHeight()/2);
 			JLabel id = new JLabel("Identifiant:");
 			JLabel mdp = new JLabel("Mot de Passe:");
 			JButton valider = new JButton("Valider");
+			JLabel titre = new JLabel("PHOTOCO");
+			Font font = new Font("Verdana", Font.BOLD, 12);
 			id.setForeground(Color.WHITE);
+			id.setFont(font);
 			mdp.setForeground(Color.WHITE);
-			add(id);
-			add(identifiant);
-			add(mdp);
-			add(motdepasse);
-			add(valider);
+			mdp.setFont(font);
+			titre.setForeground(Color.WHITE);
+			titre.setFont(new Font("Verdana", Font.PLAIN, 38));
+			gbc.gridx = 0;
+			gbc.gridy = 1;
+			add(id,gbc);
+			gbc.gridx = 1;
+			gbc.gridy = 1;
+			add(identifiant,gbc);
+			gbc.gridx = 0;
+			gbc.gridy = 2;
+			gbc.insets = new Insets(25, 0, 0, 0);
+			add(mdp,gbc);
+			gbc.gridx = 1;
+			gbc.gridy = 2;
+			add(motdepasse,gbc);
+			gbc.gridx = 0;
+			gbc.gridy = 3;
+			gbc.gridwidth=2;
+			add(valider,gbc);
+			gbc.gridx = 0;
+			gbc.gridy = 0;
+			gbc.gridwidth = 2;
+			gbc.insets = new Insets(0, 0, 50, 0);
+			add(titre,gbc);
+			
+			for (Component c : getComponents()) {
+				c.getParent().setBackground(new Color(255, 255, 255, 100));
+			}
+							
 			
 			valider.addActionListener(new ValidationButton());
-			this.addKeyListener(new ValidationKey());
+			motdepasse.addKeyListener(new ValidationKey());
 		}
 		
 		public void validation() {
 			String id = identifiant.getText();
+			@SuppressWarnings("deprecation")
 			String mdp = motdepasse.getText();
 			
 			if(id.equals("admin") && mdp.equals("admin")) {
+				//Si l'utilisateur est un ADMIN
 				System.out.println("Admin !");
-				fenetre.change(2);
+				fenetre.change(Fenetre.MENU_ADMIN,null);
 			}else if (id.equals("")||id.equals("")) {
 				System.out.println("Champ(s) vide");
 			}else {
+				//si l'utilisateur est un utilisateur lambda
 				System.out.println("Utilisateur !");
+				fenetre.change(Fenetre.MENU_RECHERCHE, null);
 			}
 		}
 		
@@ -112,20 +172,13 @@ public class LoginMenu{
 			}
 			
 		}
-		
 		@Override
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			String fichier = "./src/ihm/Photo1-Login-TDG_photography_Tapei.jpg";
-			BufferedImage im = null;
-			try {
-				im = ImageIO.read(new File(fichier));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			g.drawImage(im, 0,0,this.getWidth(),this.getHeight(),null);
+			g.drawImage(backgroundImage, 0, 0, fenetre.getWidth(), fenetre.getHeight(),this);
 			
 			
 		}
+	
 	}
 }
