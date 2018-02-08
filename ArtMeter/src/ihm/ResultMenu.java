@@ -25,11 +25,14 @@ import comparator.Comparateur;
 
 public class ResultMenu {
 	
+	PhotographeIdeal ideal;
 	Fenetre fenetre;
 	
-	public ResultMenu(Fenetre fenetre) {
+	public ResultMenu(Fenetre fenetre, Photographe ideal) {
 		this.fenetre = fenetre;
+		this.ideal = (PhotographeIdeal)ideal;
 		fenetre.add(new PanneauResult());
+		fenetre.setTitle("Resultats");
 	}
 	
 
@@ -40,14 +43,6 @@ public class ResultMenu {
 			
 
 				BDaccess bd = new BDaccess();
-					
-				//Je cree un ideal.
-				Specialite mode = new Specialite ("mode",2);
-				Specialite portrait = new Specialite ("portrait",2);
-				Continent europe = new Continent("Europe",1000);
-				Pays france = new Pays("France", europe); 
-				PhotographeIdeal ideal = new PhotographeIdeal ("Ideal", "Mon", france, 100, 30, mode, 3);
-				System.out.println(ideal);
 				
 				//Je cree une liste des photographes de la BD.
 				bd.requestAll();		

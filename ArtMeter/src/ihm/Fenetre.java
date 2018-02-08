@@ -60,10 +60,10 @@ public class Fenetre extends JFrame{
 			//TODO a remplir
 		}
 		if (layout == MENU_RECHERCHE) {
-			//TODO a remplir
+			new SearchMenu(this);
 		}
 		if (layout == MENU_RESULTAT_RECHERCHE) {
-			//TODO a remplir
+			new ResultMenu(this, p.get(0));
 		}
 		current_layout = layout;
 		setVisible(true);
