@@ -302,7 +302,14 @@ public class BDaccess {
 					}
 					
 				}
-				String requete = "DELETE id_photographe="+id+" FROM Photographe";
+				String requete = "DELETE FROM Photographe WHERE id_photographe='"+id+"'";
+				System.out.println(requete);
+				try {
+					state.executeUpdate(requete);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				photographes.remove(photographe);
 				ids_photographes.remove(id);
 				
@@ -321,13 +328,20 @@ public class BDaccess {
 	public void ajouterPhotographe(Photographe photographe, Pays pays) {
 		String requete = null;
 		Integer id_pays = 0;
-		requete = "INSERT INTO `Photographe` (`id_photographe`, `Nom`, `Prenom`, `Photo`, `Lienportfolio`, `age`, `prixPrestation`, `id_pays`)";
+		requete = "INSERT INTO `Photographe` ( `Nom`, `Prenom`, `Photo`, `Lienportfolio`, `age`, `prixPrestation`, `id_pays`) ";
 		for (Integer o : ids_photographes.keySet()) {
 		      if (ids_photographes.get(o).equals(photographe)) {
 		    	  id_pays = o;
 		      }
 		 }
-		requete += "VALUES ('', '"+photographe.getPrenom()+"', '"+photographe.getNom()+"', '', '', '"+photographe.getAge()+"', '"+photographe.getPrixPrestation()+"', '"+id_pays+"')";
+		requete += "VALUES ('"+photographe.getPrenom()+"', '"+photographe.getNom()+"', '', '', '"+photographe.getAge()+"', '"+photographe.getPrixPrestation()+"', '"+id_pays+"')";
+		try {
+			state.executeUpdate(requete);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(requete);
 		requestAll();
 	}
 	
@@ -346,23 +360,26 @@ public class BDaccess {
 			      }
 			 }
 		}
-		/*il faut r�cup�rer l'id du pays du photographe*/
+		/*il faut récupérer l'id du pays du photographe*/
 		if(ids_pays.containsValue(photographe.getPays())) {
-			for (Integer o : ids_photographes.keySet()) {
+			for (Integer o : ids_pays.keySet()) {
 			      if (ids_pays.get(o).equals(photographe.getPays())) {
 			    	  id_pays = o;
 			      }
 			 }
 		}
-		/*effectuer les modifications sur la base de donn�es*/
+		/*effectuer les modifications sur la base de données*/
 		requete = "UPDATE `Photographe`";
 		requete += " SET `Nom` = '"+photographe.getNom()+"', `Prenom` = '"+photographe.getPrenom()+"', `age` = '"+photographe.getAge()+"', `prixPrestation` = '"+photographe.getPrixPrestation()+"', `id_pays` = '"+id_pays+"' WHERE `Photographe`.`id_photographe` = "+id+";";
-		
-		
-		
+		try {
+			state.executeUpdate(requete);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 	}
 	
-	/** renvoi true si la requ�te est vide, false sinon
+	/** renvoi true si la requête est vide, false sinon
 	 * 
 	 * @param sql requete que l'on veux tester.
 	 */

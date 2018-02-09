@@ -24,7 +24,17 @@ public class Photographe {
 	
 	@Override
 	public String toString() {
-		return (prenom + " " + nom + ", " + age + " ans" + ", " + pays + ", " + prixPrestation + "euros.");
+		return (prenom + " " + nom + ", " + age + " ans" + ", " + pays + ", " + prixPrestation + " euros.");
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Photographe) {
+			Photographe p = (Photographe)obj;
+			if(p.getPrenom().equals(getPrenom()) && p.getNom().equals(getNom()) && p.getAge() == getAge() && p.getPays().equals(getPays()) && p.getPrixPrestation() == getPrixPrestation()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public String getNom() {
@@ -95,37 +105,37 @@ public class Photographe {
 	public int getExperience(Specialite specialite, ArrayList<AUneSpecialite> aus) {
 		int exp = 0;
 		for(AUneSpecialite a : aus) {
-			if(a.getPhotographe() == this && a.getSpecialite() == specialite) {
+			if(a.getPhotographe().equals(this) && a.getSpecialite().equals(specialite)) {
 				exp = a.getExperience();
 			}
 		}
-		return 0;
+		return exp;
 	}
 	
 	/**
-	 * Permet de r�cup�rer toutes les ann�es d'experiences d'un photographes dans ses diff�rentes specialites
+	 * Permet de récupérer toutes les années d'experiences d'un photographes dans ses diff�rentes specialites
 	 * @param aus arraylist d'objet AUneSpecialite, qui contient toutes les relations entre les photographes et les specialite avec leurs ann�es d'experiences
-	 * @return retourne une hasmap qui contient la relation Specialit� : nb d'annee d'experience
+	 * @return retourne une hasmap qui contient la relation Specialité : nb d'annee d'experience
 	 */
 	public HashMap<Specialite, Integer> getAllExperiences(ArrayList<AUneSpecialite> aus){
 		HashMap<Specialite, Integer> si = new HashMap<>();
 		for(AUneSpecialite a : aus) {
-			if(a.getPhotographe() == this) {
+			if(a.getPhotographe().equals(this)) {
 				si.put(a.getSpecialite(), a.getExperience());
 			}
 		}
-		return null;
+		return si;
 	}
 	
 	/**
-	 * Fonction qui permet de r�cup�rer toutes les sp�cialites d'un photographe
+	 * Fonction qui permet de récupérer toutes les sp�cialites d'un photographe
 	 * @param aus arraylist d'objet AUneSpecialite, qui contient toutes les relations entre les photographes et les specialite avec leurs ann�es d'experiences
 	 * @return retourne une arraylist qui contient toute les specialite du photographe
 	 */
 	public ArrayList<Specialite> getSpecialites(ArrayList<AUneSpecialite> aus){
 		ArrayList<Specialite> sp = new ArrayList<>();
 		for(AUneSpecialite a : aus) {
-			if(a.getPhotographe() == this) {
+			if(a.getPhotographe().equals(this)) {
 				sp.add(a.getSpecialite());
 			}
 		}
