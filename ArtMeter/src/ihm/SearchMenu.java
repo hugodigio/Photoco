@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -58,8 +59,10 @@ public class SearchMenu {
 	private class PanneauSearch extends JPanel {
 		
 		private JTextField JTFexperience, JTFpays, JTFprix, JTFage;
-		private JLabel JLspecialite, JLexperience, JLpays, JLprix, JLage;
+		private JLabel JLerreur, JLspecialite, JLexperience, JLpays, JLprix, JLage;
 		private JList<String> listePays, listeSpe;
+		private JComboBox<Pays> paysBox;
+		 JComboBox<Specialite> speBox;
 		
 		
 		private PanneauSearch(){
@@ -70,36 +73,34 @@ public class SearchMenu {
 			setLayout(gbl);
 			GridBagConstraints gbc = new GridBagConstraints();
 			
+			JLerreur = new JLabel("");
+			JLerreur.setForeground(Color.RED);
+			
 			JLspecialite = new JLabel("Specialite");
 		    this.add(JLspecialite);
 		    
 		    ArrayList<Specialite> listeSpe = bd.requestSpecialites();
-			JComboBox speBox = new JComboBox();
+			speBox = new JComboBox();
 		    for(Specialite s : listeSpe){
 		    	speBox.addItem(s);
 		    	speIdeal = s;
 		    }
 		    speBox.setSelectedIndex(3);
-		    speBox.addActionListener(new ComboSpe());
 			
 		    JLexperience = new JLabel("Experience");
 		    this.add(JLexperience);
 		    JTFexperience = new JTextField(20);
-		    DocumentListener dlExperience = new ExperienceListener();
-		    JTFexperience.getDocument().addDocumentListener(dlExperience);
 		    this.add(JTFexperience);
 		    
 		    JLpays = new JLabel("Pays");
 		    this.add(JLpays);
 		    ArrayList<Pays> listePays = bd.requestPays();
-			JComboBox paysBox = new JComboBox();
+		    paysBox = new JComboBox();
 		    for(Pays p : listePays){
 		    	paysBox.addItem(p);
 		    	paysIdeal = p;
 		    }
-		    paysBox.setSelectedIndex(11);
-		   // paysBox.setRenderer(new paysRenderer());
-		    paysBox.addActionListener(new ComboPays());
+		    paysBox.setSelectedIndex(0);
 		    
 		    
 		    
@@ -107,15 +108,11 @@ public class SearchMenu {
 		    this.add(JLprix);
 		    JTFprix = new JTextField(20);
 		    this.add(JTFprix);
-		    DocumentListener dlPrix = new PrixListener();
-		    JTFprix.getDocument().addDocumentListener(dlPrix);
 		    
 		    JLage = new JLabel("Age");
 		    this.add(JLage);
 		    JTFage = new JTextField(20);
 		    this.add(JTFage);
-		    DocumentListener dlAge = new AgeListener();
-		    JTFage.getDocument().addDocumentListener(dlAge);
 		    
 			JButton valider = new JButton("Valider");
 			valider.addActionListener(new ValidationButton());
@@ -164,179 +161,85 @@ public class SearchMenu {
 			gbc.gridy = 6;
 			gbc.gridwidth=2;
 			add(valider,gbc);
+			gbc.gridx = 0;
+			gbc.gridy = 0;
+			gbc.insets = new Insets(0, 0, 20, 0);
+			add(JLerreur,gbc);
 			
 			bd.closeConnection();
 		    
 		}
 		
-		/*--------------LES LISTENERS----------------*/
-		
-		
-		private class ExperienceListener implements DocumentListener{
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				expIdeal = setExp(Integer.parseInt(JTFexperience.getText()));
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				if(!(JTFexperience.getText().equals(""))){
-					expIdeal = setExp(Integer.parseInt(JTFexperience.getText()));
-				}
-				else{
-					expIdeal = setExp(0);
-				}
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				expIdeal = setExp(Integer.parseInt(JTFexperience.getText()));		
-			}
-
-		}
-		
-		private class PrixListener implements DocumentListener{
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				prixIdeal = setPrix(Integer.parseInt(JTFprix.getText()));
-				
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				if(!(JTFprix.getText().equals(""))){
-					prixIdeal = setPrix(Integer.parseInt(JTFprix.getText()));
-				}
-				else{
-					prixIdeal = setPrix(0);
-				}
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				prixIdeal = setPrix(Integer.parseInt(JTFprix.getText()));
-				
-			}
-		}
-		
-		private class AgeListener implements DocumentListener{
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				ageIdeal = setAge(Integer.parseInt(JTFage.getText()));
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				if(!(JTFprix.getText().equals(""))){
-					ageIdeal = setAge(Integer.parseInt(JTFage.getText()));
-				}
-				else{
-					ageIdeal = setAge(20);
-				}
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				ageIdeal = setAge(Integer.parseInt(JTFage.getText()));				
-			}
-		}
-		
-	}
-	
-	/*-----------------COMBOBOX SPE---------------------------------------*/
-	
-	public class ComboSpe implements ActionListener {
-	   
-	    public void actionPerformed(ActionEvent e) {
-	        JComboBox cb = (JComboBox)e.getSource();
-	        speIdeal = (Specialite)cb.getSelectedItem();
-	    }
-	    
-	}
-	
-	/*------------------SPEBOX RENDERER-----------------------------------*/
-	
-	/*private class paysRenderer implements ListCellRenderer<Object>{
-		
-			public Component getListCellRendererComponent(JList<?> list,
-										                    Object value,
-										                    int index,
-										                    boolean isSelected,
-										                    boolean cellHasFocus) {
-				
-			        setText(((Pays) value).getNom());
-			        return this;
-			}
-		}*/
-
-	
-	/*-------------------- COMBOBOX PAYS-----------------------------*/
-	
-	private class ComboPays implements ActionListener {
-		
-		public void actionPerformed(ActionEvent e) {
-		        JComboBox cb = (JComboBox)e.getSource();
-		        paysIdeal = (Pays)cb.getSelectedItem();
-		}
-		
-	}
-
-	
-	/*----------------------VALIDATION-----------------------------------------*/
-	private class ValidationButton implements ActionListener {
-		
 		@Override
-		public void actionPerformed(ActionEvent e) {
-			validation();				
+		protected void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			Graphics2D g2d = (Graphics2D)g;
+			float ratio = 16.0f/9.0f;
+			if((float)fenetre.getWidth()/(float)fenetre.getHeight() >= ratio) {
+				g.drawImage(Fenetre.backgroundImage, 0, 0, fenetre.getWidth(), (int)(fenetre.getWidth()*(0.5625)),this);	
+			}else {
+				g.drawImage(Fenetre.backgroundImage, 0, 0, (int)(fenetre.getHeight()*(1.7777777778)), fenetre.getHeight(),this);	
+			}
+			int milieuX = fenetre.getWidth()/2;
+			int milieuY = fenetre.getHeight()/2;
+			
+			Rectangle2D rect = new Rectangle2D.Double(milieuX-200,milieuY-200,400,350);
+			g2d.setColor(new Color(255, 255, 255, 200));
+			g2d.fill(rect);
+			g2d.draw(rect);
+		}
+		/*----------------------VALIDATION-----------------------------------------*/
+		private class ValidationButton implements ActionListener {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				validation();				
+			}
+			
 		}
 		
-	}
-	
-	private class ValidationKey extends KeyAdapter {
-		
-		@Override
-		public void keyPressed(KeyEvent e) {
-			if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-				validation();
+		private class ValidationKey extends KeyAdapter {
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					validation();
+				}
+			}
+			
+		}
+		public void validation() {
+			
+			//J'ecris crée un ideal
+			
+			//vérification conformité formulaire
+			if(!JTFage.getText().equals("") && !isNumber(JTFage.getText())) {
+				JLerreur.setText("veuillez entrer une valeur numerique pour l'age");
+			} else if(!JTFprix.getText().equals("") && !isNumber(JTFprix.getText())) {
+				JLerreur.setText("veuillez entrer une valeur numerique le prix");
+			} else if(!JTFexperience.getText().equals("") && !isNumber(JTFexperience.getText())) {
+				JLerreur.setText("veuillez entrer une valeur numerique l'experience");
+			} else {
+				Specialite spe = (Specialite)speBox.getSelectedItem();
+				int exp = 0;
+				if(!JTFexperience.getText().equals("")) exp = Integer.parseInt(JTFexperience.getText());
+				Pays pays = (Pays)paysBox.getSelectedItem();
+				int prix = 0;
+				if(!JTFprix.getText().equals("")) prix = Integer.parseInt(JTFprix.getText());
+				int age = 20;
+				if(!JTFage.getText().equals("")) age = Integer.parseInt(JTFage.getText());
+				PhotographeIdeal ideal = new PhotographeIdeal ("Ideal", "Mon", pays, prix, age, spe, exp);
+				System.out.println(ideal);
+				ArrayList<Photographe> liste = new ArrayList <>();
+				liste.add(ideal);
+				fenetre.change(Fenetre.MENU_RESULTAT_RECHERCHE,liste);
 			}
 		}
-		
 	}
 	
-	/*----------------------CREATION DE L'IDEAL---------------------------------*/
 	
-	private int setExp(int parseInt) {
-		return parseInt;
-	}
-	
-	private int setPrix(int parseInt) {
-		return parseInt;
-	}
-	
-	private int setAge(int parseInt) {
-		return parseInt;
-	}
-	
-	private Specialite setSpe(String nom, int groupe){
-		Specialite spe = new Specialite (nom, groupe);
-		return spe;
-		
-	}
-	
-	public void validation() {
-		
-		//J'ecris crée un ideal
-		
-		PhotographeIdeal ideal = new PhotographeIdeal ("Ideal", "Mon", paysIdeal, prixIdeal, ageIdeal, speIdeal, expIdeal);
-		System.out.println(ideal);
-		ArrayList<Photographe> liste = new ArrayList <>();
-		liste.add(ideal);
-		fenetre.change(Fenetre.MENU_RESULTAT_RECHERCHE,liste);
-		
-	}
-	
+	public boolean isNumber(String str) {
+		return str.matches("[0-9]*");
+	}	
 	
 }
