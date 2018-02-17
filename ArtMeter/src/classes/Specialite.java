@@ -14,6 +14,17 @@ public class Specialite {
 		return (nom);
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Specialite) {
+			Specialite s = (Specialite)obj;
+			if (s.getNom().equals(getNom())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public int getGroupe() {
 		return groupe;
 	}
